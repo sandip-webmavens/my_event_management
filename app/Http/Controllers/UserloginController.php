@@ -39,7 +39,7 @@ class UserloginController extends Controller
         if ($user->role_id == 1) {
             return redirect()->route('admin')->with('success', 'Login successful');
         } else {
-            return redirect()->route('user.home')->with('success', 'You are a user');
+            return redirect()->route('home.index')->with('success', 'You are a user');
         }
     }
 

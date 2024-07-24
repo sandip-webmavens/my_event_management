@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\EventController;
 use App\Http\Controllers\admin\TicketController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\user\UserAreaController;
 use App\Http\Controllers\admin\OrganizationController;
 use App\Http\Controllers\UserloginController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,9 @@ Route::prefix('/user')->group(function () {
     Route::post('/register', [UserloginController::class, 'register'])->name('user.register.post');
     Route::get('/login', [UserloginController::class, 'userLogin'])->name('user.login');
     Route::post('/login', [UserloginController::class, 'userLoginPost'])->name('user.login.post');
-    Route::get('/home', [UserloginController::class, 'userHome'])->name('user.home')->middleware(CheckUserSession::class);
     Route::post('/logout', [UserloginController::class, 'logout'])->name('user.logout');
 });
+
+
+// Route::get('/home', [UserloginController::class, 'userHomePage'])->name('user.home.page')->middleware(CheckUserSession::class);
+Route::resource('/home', UserAreaController::class)->middleware(CheckUserSession::class);
