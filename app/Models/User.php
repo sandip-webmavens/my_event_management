@@ -2,11 +2,6 @@
 
 namespace App\Models;
 
-// use Carbon\Carbon;
-// use DateTimeInterface;
-// use Hash;
-// use Illuminate\Auth\Notifications\ResetPassword;
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,7 +14,7 @@ class User extends Authenticatable implements HasMedia
 {
     use SoftDeletes, Notifiable, HasFactory, InteractsWithMedia;
 
-    public $table = 'users';
+    protected $table = 'users';
 
     protected $hidden = [
         'remember_token',
@@ -48,15 +43,15 @@ class User extends Authenticatable implements HasMedia
         'created_at',
         'updated_at',
         'deleted_at',
-        'roll_id'
+        'role_id',
+        'google_id',
+        'twitter_id',
+        'linkedin_id'
     ];
 
     public function registerMediaCollections(): void
     {
-        $this
-            ->addMediaCollection('image')
-            ->singleFile();
-
+        $this->addMediaCollection('image')->singleFile();
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -67,6 +62,7 @@ class User extends Authenticatable implements HasMedia
             ->height(50)
             ->performOnCollections('image');
     }
+
     public function organization()
     {
         return $this->hasMany(Organization::class);
@@ -76,7 +72,6 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Event::class);
     }
-
 
     public function attendees()
     {
@@ -92,10 +87,12 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(EventCategory::class);
     }
+
     public function bookmarks()
     {
         return $this->hasMany(Bookmarks::class);
     }
+
     public function eventorder()
     {
         return $this->hasMany(EventOrders::class);

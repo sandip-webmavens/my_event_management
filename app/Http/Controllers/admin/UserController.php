@@ -29,8 +29,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'image' => 'nullable|image|max:2048',
+            'password' => 'required',
         ]);
 
         $user = new User();
@@ -106,8 +105,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:8',
-            'image' => 'nullable|image|max:2048',
+            'password' => 'required',
         ]);
 
         $user = User::findOrFail($id);
@@ -128,7 +126,7 @@ class UserController extends Controller
             }
         }
 
-        return redirect()->route('user.show')->with('success', 'User updated successfully.');
+        return back()->with('success', 'User updated successfully.');
     }
 
     public function UserDelete($id)

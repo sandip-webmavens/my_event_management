@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\EventController;
 use App\Http\Controllers\admin\TicketController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\user\UserAreaController;
 use App\Http\Controllers\admin\OrganizationController;
 use App\Http\Controllers\UserloginController;
@@ -46,9 +47,18 @@ Route::prefix('/user')->group(function () {
     Route::post('/register', [UserloginController::class, 'register'])->name('user.register.post');
     Route::get('/login', [UserloginController::class, 'userLogin'])->name('user.login');
     Route::post('/login', [UserloginController::class, 'userLoginPost'])->name('user.login.post');
+
     Route::post('/logout', [UserloginController::class, 'logout'])->name('user.logout');
 });
 
-
 // Route::get('/home', [UserloginController::class, 'userHomePage'])->name('user.home.page')->middleware(CheckUserSession::class);
 Route::resource('/home', UserAreaController::class)->middleware(CheckUserSession::class);
+
+Route::get('auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
+
+Route::get('/auth/linkedin', [SocialiteController::class, 'redirectToLinkedin'])->name('auth.linkedin');
+Route::get('/auth/linkedin/callback', [SocialiteController::class, 'handleLinkedinCallback']);
+
+Route::get('/auth/twitter', [SocialiteController::class, 'redirectToTwitter'])->name('auth.twitter');
+Route::get('/auth/twitter/callback', [SocialiteController::class, 'handleTwitterCallback']);

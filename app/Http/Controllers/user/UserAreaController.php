@@ -21,7 +21,7 @@ class UserAreaController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -54,7 +54,7 @@ class UserAreaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        dd($id);
     }
 
     /**
