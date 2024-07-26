@@ -11,7 +11,7 @@ class BookmarkUserController extends Controller
 {
     public function index()
     {
-        $bookmarks = Bookmarks::where('user_id' , session()->get('id'))->with('user', 'event')->get();
+        $bookmarks = Bookmarks::where('user_id' , session()->get('id'))->with('user', 'event')->get()->reverse();
         return view('user.bookmark.bookmark-show', compact('bookmarks'));
     }
     /**

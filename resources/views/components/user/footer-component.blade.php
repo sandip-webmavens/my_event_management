@@ -18,17 +18,8 @@
 <script src="{{ asset('user/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <script src="{{ asset('user/dist/js/adminlte.js') }}"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-{{-- <script>
- $(document).ready(function() {
-    LoadDataTable();
-});
 
-function LoadDataTable() {
-    $('#table').DataTable();
-}
-</script> --}}
 
 </body>
 </html>
 
-<!-- Remaining HTML content -->

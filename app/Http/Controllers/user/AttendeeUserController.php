@@ -12,20 +12,29 @@ class AttendeeUserController extends Controller
 {
     public function index()
     {
-        $ticket = Tickets::all();
-        // dd($ticket);
-        // foreach
-        $events = Event::all();
+        $userId = session()->get('id');
+        $tickets = Tickets::where('user_id', $userId)->get();
+
+        // Get unique event IDs from the tickets
+        $eventIds = $tickets->pluck('event_id')->unique();
+
+        $events = Event::whereIn('id', $eventIds)->get()->reverse();
+        // dd($events);
 
         return view('user.attendee.attendee-list', compact('events'));
     }
-
     public function EventTickets($id)
     {
-        $tickets = Tickets::where('event_id', $id)->with('user')->get()->groupBy('user.email');
+        // Fetch tickets for the specified event or the current user
+        $tickets = Tickets::where('event_id', $id)
+            ->Where('user_id', session()->get('id'))
+            ->with('user')
+            ->get()
+            ->groupBy('user.email');
 
         $attendees = collect();
 
+        // Iterate over each ticket and fetch corresponding attendees
         foreach ($tickets->flatten() as $ticket) {
             $attendees = $attendees->merge(
                 AttendeeList::where('tickets_id', $ticket->id)
@@ -44,8 +53,10 @@ class AttendeeUserController extends Controller
             );
         }
 
+        // Return the view with the collected tickets and attendees
         return view('user.attendee.attendee-event-ticket', compact('tickets', 'attendees'));
     }
+
 
     public function store(Request $request)
 {
@@ -110,7 +121,7 @@ class AttendeeUserController extends Controller
         }
     }
 
-    return redirect()->route('attendee.index')->with('success', 'Attendees updated successfully.');
+    return redirect()->route('user.attendee.index')->with('success', 'Attendees updated successfully.');
 }
 
 }

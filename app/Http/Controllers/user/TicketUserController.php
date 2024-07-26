@@ -14,7 +14,8 @@ class TicketUserController extends Controller
 {
     public function index()
     {
-        $tickets = Tickets::where('user_id' , session()->get('id'))->with('user', 'event')->get();
+        $tickets = Tickets::where('user_id' , session()->get('id'))->with('user', 'event')->get()            ->reverse();
+
         return view('user.ticket.ticket-show', compact('tickets'));
     }
 
