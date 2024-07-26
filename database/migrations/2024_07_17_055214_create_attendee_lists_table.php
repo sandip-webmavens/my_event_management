@@ -12,12 +12,9 @@ return new class extends Migration {
     {
         Schema::create('attendee_lists', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedBigInteger('event_id')->nullable();
-            $table->foreign('event_id')->references('id')->on('events')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedBigInteger('tickets_id')->nullable();
-            $table->foreign('tickets_id')->references('id')->on('tickets')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('event_id')->nullable()->constrained('events')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('tickets_id')->nullable()->constrained('tickets')->onUpdate('cascade')->onDelete('cascade');
             $table->enum('status', ['p', 'a'])->default('a');
             $table->string('qr_codes')->nullable();
             $table->timestamps();

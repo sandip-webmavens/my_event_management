@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('event_id')->nullable()->constrained('events')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('quantity')->nullable();
-            $table->string('qr_code')->nullable();
+            $table->longText('qr_code')->nullable();
             $table->boolean('is_paid')->default(false);
             $table->string('status')->default('active');
             $table->timestamps();

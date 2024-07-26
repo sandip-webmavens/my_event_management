@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin page</title>
+    <title>user page</title>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <!-- Google Font: Source Sans Pro -->
@@ -240,64 +240,12 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    User <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('user.show') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>View All</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>
-                                    organization <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('organization.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>View All</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>
-                                    category <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('category.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>View All</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>
                                     event <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('event.index') }}" class="nav-link">
+                                    <a href="{{ route('user.event.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>View All</p>
                                     </a>
@@ -313,7 +261,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('ticket.index') }}" class="nav-link">
+                                    <a href="{{ route('user.ticket.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>View All</p>
                                     </a>
@@ -330,7 +278,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('bookmark.index') }}" class="nav-link">
+                                    <a href="{{ route('user.bookmark.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>View All</p>
                                     </a>
@@ -347,7 +295,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('attendee.index') }}" class="nav-link">
+                                    <a href="{{ route('user.attendee.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>View All</p>
                                     </a>

@@ -22,7 +22,6 @@ class TicketsValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
             'event_id' => 'required|exists:events,id',
             'quantity' => 'required|integer|min:1|max:'.($this->getTotalTicketsForEvent() - $this->getTotalTicketsSoldForEvent()),
             'status' => 'required|in:active,inactive',

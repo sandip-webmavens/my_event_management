@@ -40,55 +40,52 @@ class SocialiteController extends Controller
         }
     }
 
-    public function redirectToLinkedin()
-    {
-        $redirectUrl = Socialite::driver('linkedin')
-            ->scopes(['openid','profile','w_member_social','email'])
-            ->redirect()
-            ->getTargetUrl();
+        public function redirectToLinkedin()
+        {
+            $redirectUrl = Socialite::driver('linkedin')
+                ->scopes(['openid','profile','w_member_social','email'])
+                ->redirect()
+                ->getTargetUrl();
 
-        Log::info('LinkedIn Authorization URL: ' . $redirectUrl);
+            Log::info('LinkedIn Authorization URL: ' . $redirectUrl);
 
-        return redirect($redirectUrl);
-    }
-    public function handleLinkedinCallback()
-    {
-        try {
-            // Log incoming request data
-            Log::info('LinkedIn callback request: ', ['request' => request()->all()]);
-
-            // Check if the 'code' parameter is present
-            if (!request()->has('code')) {
-                throw new \Exception('Missing "code" parameter in the callback request.');
-            }
-
-            // Get the user info from LinkedIn
-            $user = Socialite::driver('linkedin')->stateless()->user();
-            Log::info('LinkedIn user info: ', ['user' => $user]);
-
-            $findUser = User::where('email', $user->getEmail())->first();
-
-            if ($findUser) {
-                Auth::login($findUser);
-            } else {
-                $newUser = User::updateOrCreate(
-                    ['email' => $user->getEmail()],
-                    [
-                        'name' => $user->getName(),
-                        'linkedin_id' => $user->getId(),
-                        'password' => bcrypt(Str::random(24))
-                    ]
-                );
-                Auth::login($newUser);
-            }
-
-            session(['user' => Auth::user(), 'id' => Auth::user()->id]);
-            return redirect(route('home.index'));
-        } catch (\Exception $e) {
-            Log::error('LinkedIn Callback Error: ' . $e->getMessage());
-            return redirect(route('user.register'))->withErrors(['msg' => 'Something went wrong. Error: ' . $e->getMessage()]);
+            return redirect($redirectUrl);
         }
-    }
+        public function handleLinkedinCallback()
+        {
+            try {
+                Log::info('LinkedIn callback request: ', ['request' => request()->all()]);
+
+                if (!request()->has('code')) {
+                    throw new \Exception('Missing "code" parameter in the callback request.');
+                }
+
+                $user = Socialite::driver('linkedin')->stateless()->user();
+                Log::info('LinkedIn user info: ', ['user' => $user]);
+
+                $findUser = User::where('email', $user->getEmail())->first();
+
+                if ($findUser) {
+                    Auth::login($findUser);
+                } else {
+                    $newUser = User::updateOrCreate(
+                        ['email' => $user->getEmail()],
+                        [
+                            'name' => $user->getName(),
+                            'linkedin_id' => $user->getId(),
+                            'password' => bcrypt(Str::random(24))
+                        ]
+                    );
+                    Auth::login($newUser);
+                }
+
+                session(['user' => Auth::user(), 'id' => Auth::user()->id]);
+                return redirect(route('home.index'));
+            } catch (\Exception $e) {
+                Log::error('LinkedIn Callback Error: ' . $e->getMessage());
+                return redirect(route('user.register'))->withErrors(['msg' => 'Something went wrong. Error: ' . $e->getMessage()]);
+            }
+        }
 
     public function redirectToTwitter()
     {
