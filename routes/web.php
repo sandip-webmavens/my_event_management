@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\EventController;
 use App\Http\Controllers\admin\TicketController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\SocialiteController;
+use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\user\AttendeeUserController;
 use App\Http\Controllers\user\BookmarkUserController;
 use App\Http\Controllers\user\TicketUserController;
@@ -95,3 +96,8 @@ Route::get('/auth/linkedin/callback', [SocialiteController::class, 'handleLinked
 
 Route::get('/auth/twitter', [SocialiteController::class, 'redirectToTwitter'])->name('auth.twitter');
 Route::get('/auth/twitter/callback', [SocialiteController::class, 'handleTwitterCallback']);
+
+Route::controller(StripePaymentController::class)->group(function(){
+    Route::get('stripe', 'stripe');
+    Route::post('stripe', 'stripePost')->name('stripe.post');
+});

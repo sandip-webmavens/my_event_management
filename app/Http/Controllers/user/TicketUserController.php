@@ -14,8 +14,10 @@ class TicketUserController extends Controller
 {
     public function index()
     {
-        $tickets = Tickets::where('user_id' , session()->get('id'))->with('user', 'event')->get()            ->reverse();
-
+        $tickets = Tickets::where('user_id', session()->get('id'))
+                          ->with('user', 'event')
+                          ->latest() // Retrieve latest tickets
+                          ->get();
         return view('user.ticket.ticket-show', compact('tickets'));
     }
 
@@ -30,27 +32,20 @@ class TicketUserController extends Controller
     {
         $data = $request->validated();
         $data['is_paid'] = $request->has('is_paid') ? 1 : 0;
-
         $event = Event::findOrFail($data['event_id']);
-        $ticketPrice = $event->ticket_price;
-
         $data['qr_code'] = $this->generateBarcodes($request->quantity);
         $data['user_id'] = session()->get('id');
 
         $ticket = Tickets::create($data);
 
         if ($ticket->is_paid) {
-            $this->createPaymentRecord($ticket, $ticketPrice);
+            $paymentData = $this->createPaymentRecord($ticket, $event->ticket_price);
+            // Handle payment logic or redirect to payment gateway
+            // return redirect()->route('stripe', $paymentData)->with('success', 'Payment was successful.');
         }
 
         return redirect()->route('user.ticket.index')->with('success', 'Ticket created successfully.');
     }
-
-    // public function show(string $id)
-    // {
-    //     $ticket = Tickets::with('user', 'event')->findOrFail($id);
-    //     return view('user.ticket.ticket-show-single', compact('ticket'));
-    // }
 
     public function edit(string $id)
     {
@@ -66,16 +61,15 @@ class TicketUserController extends Controller
         $data = $request->validated();
         $data['is_paid'] = $request->has('is_paid') ? 1 : 0;
         $data['user_id'] = session()->get('id');
-
         $event = Event::findOrFail($data['event_id']);
-        $ticketPrice = $event->ticket_price;
-
         $data['qr_code'] = $this->generateBarcodes($request->quantity);
 
         $ticket->update($data);
 
         if ($ticket->is_paid) {
-            $this->createPaymentRecord($ticket, $ticketPrice);
+            $paymentData = $this->createPaymentRecord($ticket, $event->ticket_price);
+            // Handle payment logic or redirect to payment gateway
+            return redirect()->route('stripe', $paymentData)->with('success', 'Payment was successful.');
         }
 
         return redirect()->route('user.ticket.index')->with('success', 'Ticket updated successfully.');
@@ -111,11 +105,24 @@ class TicketUserController extends Controller
     private function createPaymentRecord($ticket, $ticketPrice)
     {
         $amount = $ticketPrice * $ticket->quantity;
-        TicketPayment::updateOrCreate(['ticket_id' => $ticket->id,], [
+        $transaction_id = $this->generateRandomString(10);
+        $paid_at = now();
+
+        // Create a new TicketPayment record
+        // TicketPayment::create([
+        //     'amount' => $amount,
+        //     'ticket_id' => $ticket->id,
+        //     'payment_method' => 'stripe',
+        //     'transaction_id' => $transaction_id,
+        //     'paid_at' => $paid_at,
+        // ]);
+
+        return [
             'amount' => $amount,
-            'payment_method' => 'Manual', // Adjust this based on actual payment method
-            'transaction_id' => $this->generateRandomString(10), // Placeholder transaction ID
-            'paid_at' => now(),
-        ]);
+            'ticket_id' => $ticket->id,
+            'payment_method' => 'stripe',
+            'transaction_id' => $transaction_id,
+            'paid_at' => $paid_at
+        ];
     }
 }

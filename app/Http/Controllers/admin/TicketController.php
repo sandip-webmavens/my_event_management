@@ -115,3 +115,11 @@ class TicketController extends Controller
         ]);
     }
 }
+
+
+ // TicketPayment::updateOrCreate(['ticket_id' => $ticket->id,], [
+        //     'amount' => $amount,
+        //     'payment_method' => 'Manual',
+        //     'transaction_id' => $this->generateRandomString(10),
+        //     'paid_at' => now(),
+        // ]);

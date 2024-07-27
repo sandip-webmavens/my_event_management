@@ -65,8 +65,6 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div id="map" style="height: 400px; width: 100%;"></div>
-                        <div id="map-error" style="display: none; color: red; font-weight: bold; text-align: center;">Failed to load Google Maps.</div>
 
                         <div class="form-group">
                             <label for="category_id">Category</label>
@@ -124,57 +122,3 @@
         <x-user.footer-component />
     </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBluhGPTyMs3uE4OneqolrgJa5Cz0x-yu8&callback=initMap" async defer></script>
-    <script>
-        let map;
-        let marker;
-        let geocoder;
-
-        function initMap() {
-            geocoder = new google.maps.Geocoder();
-            const initialLocation = { lat: 22.6708, lng: 71.5724 }; // Default location
-            map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 8,
-                center: initialLocation,
-            });
-            marker = new google.maps.Marker({
-                map,
-                position: initialLocation,
-            });
-
-            // Handle address input
-            const locationInput = document.getElementById('location').value;
-            // console.log(locationInput);
-            if (locationInput) {
-                geocodeAddress(locationInput);
-            }
-
-            // Add event listener to location input
-            document.getElementById('location').addEventListener('change', () => {
-                const address = document.getElementById('location').value;
-                geocodeAddress(address);
-            });
-        }
-
-        function geocodeAddress(address) {
-            geocoder.geocode({ address: address }, (results, status) => {
-                if (status === "OK") {
-                    map.setCenter(results[0].geometry.location);
-                    marker.setPosition(results[0].geometry.location);
-                    map.setZoom(15); // Zoom in to the location
-                } else {
-                    alert("Geocode was not successful for the following reason: " + status);
-                }
-            });
-        }
-
-        // Handle API load failure
-        window.addEventListener('error', function(event) {
-            if (event.message.includes('Google Maps JavaScript API')) {
-                document.getElementById('map-error').style.display = 'block'; // Show error message if API fails
-            }
-        });
-    </script>
-<x-user.footer-component />
